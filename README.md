@@ -1,12 +1,14 @@
-![Banner](assets/banner.png)
-
-[![Latest Github release](https://img.shields.io/github/release/feenko/meteor.svg)](https://github.com/feenko/meteor/releases/latest)
-[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Tests Status](https://github.com/feenko/meteor/actions/workflows/ci.yml/badge.svg)](https://github.com/feenko/meteor/actions/workflows/ci.yml)
-
 # Meteor
 
+[![Python Version](https://img.shields.io/badge/python-3.13.2-3d93d4.svg?logo=python&logoColor=959da5&labelColor=2f343b)](https://www.python.org/downloads/release/python-3132)
+[![UV Version](https://img.shields.io/badge/managed%20with-uv-df5fe8.svg?logo=uv&logoColor=959da5&labelColor=2f343b)](https://docs.astral.sh/uv)
+[![Tests Status](https://github.com/feenko/meteor/actions/workflows/ci.yml/badge.svg)](https://github.com/feenko/meteor/actions/workflows/ci.yml)
+
 Fast and reliable Discord solution written in Python using modern technologies.
+
+## Changelog
+
+All notable changes to this project will be documented in the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## License
 
