@@ -1,5 +1,0 @@
-[2025-03-05 14:43:37,222] [WARNING] [meteor]: Using asyncio event loop. For production environments, use uvloop.
-[2025-03-05 14:43:38,839] [INFO] [meteor.migrations]: Database schema is already up to date
-[2025-03-05 14:43:38,841] [INFO] [meteor.cogs]: Loaded the following cogs: Info
-[2025-03-05 14:43:41,980] [INFO] [meteor.client]: Logged in as Buddy#0049 and currently serving 1 guild(s)
-[2025-03-05 15:05:12,858] [CRITICAL] [meteor]: Process interrupted by user.

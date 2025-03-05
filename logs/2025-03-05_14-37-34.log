@@ -1,2 +1,0 @@
-[2025-03-05 14:37:34,844] [WARNING] [meteor]: Using asyncio event loop. For production environments, use uvloop.
-[2025-03-05 14:37:35,176] [CRITICAL] [meteor]: Process interrupted by user.
