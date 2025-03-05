@@ -1,4 +1,5 @@
 import logging
+import traceback
 from datetime import datetime
 from pathlib import Path
 
@@ -13,6 +14,8 @@ class Handler(logging.Handler):
 
     def emit(self, record):
         self.console.print(self.formatter.format(record), highlight=False)
+        if record.levelno >= logging.ERROR and record.exc_info:
+            self.console.print(traceback.format_exc())
 
 
 class Formatter(logging.Formatter):
