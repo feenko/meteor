@@ -20,9 +20,6 @@ To work with the Meteor project, you need to have the following:
    ```bash
    uv run -m meteor
    ```
-   
-   > [!IMPORTANT]
-   > The `-m` flag is crucial. Omitting it will result in error messages.
 
 ## Configuration
 
@@ -30,7 +27,5 @@ After the first run, you need to configure the project:
 
 1. Fill in the generated `config/secrets.toml` file with the necessary secrets.
 2. If you need to override any settings, create a file named `config/settings.override.toml`.
-    > [!NOTE]
-    > This file is not included in the version control system.
 
 By following these steps, you will successfully set up the Meteor project.
