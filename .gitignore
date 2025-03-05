@@ -29,3 +29,7 @@ __pycache__/
 # config
 config/secrets.toml
 config/*.override.toml
+
+# logs
+logs/
+*.log
