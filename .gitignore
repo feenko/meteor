@@ -1,0 +1,31 @@
+# environments
+.env*
+.venv/
+venv/
+env/
+__pypackages__/
+
+# byte-compiled / optimized / dll files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# c extensions
+*.so
+
+# cache
+.ruff_cache/
+.pytest_cache/
+.cache/
+.meteor/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# config
+config/secrets.toml
+config/*.override.toml

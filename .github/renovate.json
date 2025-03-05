@@ -1,0 +1,40 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        ":semanticCommitsDisabled"
+    ],
+    "reviewers": [
+        "feenko"
+    ],
+    "groupName": "all dependencies",
+    "groupSlug": "all",
+    "packageRules": [
+        {
+            "groupName": "all non-major dependencies",
+            "groupSlug": "all-minor-patch",
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
+            "automerge": true
+        },
+        {
+            "groupName": "lockfile",
+            "groupSlug": "lockfile",
+            "matchUpdateTypes": [
+                "lockFileMaintenance"
+            ],
+            "automerge": true
+        }
+    ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": [
+            "after 6pm on sunday"
+        ],
+        "automerge": true
+    },
+    "dependencyDashboard": false,
+    "timezone": "Europe/Warsaw"
+}
