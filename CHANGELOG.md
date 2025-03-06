@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 
+- Basic userinfo command.
 - Docker support.
 - Uvloop for Linux and MacOS systems.
 - PostgresQL database support using asyncpg.

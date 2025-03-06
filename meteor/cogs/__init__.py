@@ -1,12 +1,12 @@
 import logging
 
-from meteor.cogs.info import Info
+from meteor.cogs.discord import Discord
 
 _log = logging.getLogger(__name__)
 
 
 async def setup(bot) -> None:
-    modules = (Info(bot),)
+    modules = (Discord(bot),)
     for module in modules:
         await bot.add_cog(module)
     cog_names = ', '.join(module.__class__.__name__ for module in modules)
