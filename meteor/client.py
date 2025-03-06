@@ -1,4 +1,5 @@
 import logging
+import time
 
 import orjson
 from asyncpg import Connection, Pool, create_pool
@@ -16,6 +17,7 @@ class Client(commands.Bot):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.pool: Pool | None = None
+        self.boot = time.perf_counter()
         self.config = Config()
         self.owner_ids = set(owner['id'] for owner in self.config.get_config('users.owners'))
 
@@ -43,6 +45,8 @@ class Client(commands.Bot):
         await self.tree.sync()
         if is_docker():
             _log.info('docker-ok')
+        _log.info(f'Synchronized {len(self.tree.get_commands())} command(s)')
+        _log.info(f'Boot completed in {time.perf_counter() - self.boot:.2f} seconds')
 
     async def run(self) -> None:
         await self.start(token=self.config.get_secret('bot.token'), reconnect=True)
