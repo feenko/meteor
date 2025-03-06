@@ -14,10 +14,11 @@ class Secrets(BaseModel):
 
 
 class Settings(BaseModel):
-    class Branding(BaseModel):
+    class Bot(BaseModel):
         color: str = ''
+        status: str = ''
 
-    branding: Branding = Branding()
+    bot: Bot = Bot()
 
     class Users(BaseModel):
         class User(BaseModel):

@@ -23,32 +23,32 @@ class TestConfig:
 
     def test_default_values(self, config):
         assert config.get_secret('bot.token') == Secrets().bot.token
-        assert config.get_config('branding.color') == Settings().branding.color
+        assert config.get_config('bot.color') == Settings().bot.color
         assert config.get_secret('missing.secret') is None
         assert config.get_config('missing.config') is None
 
     def test_config_reload(self, config, tmp_config_dir):
         settings_file = tmp_config_dir / 'settings.toml'
         settings = rtoml.load(settings_file) if settings_file.exists() else {}
-        settings['branding'] = {'color': '#abcdef'}
+        settings['bot'] = {'color': '#abcdef'}
 
         with settings_file.open('w') as f:
             rtoml.dump(settings, f)
 
-        assert config.get_config('branding.color') == Settings().branding.color
+        assert config.get_config('bot.color') == Settings().bot.color
         config.reload()
-        assert config.get_config('branding.color') == '#abcdef'
+        assert config.get_config('bot.color') == '#abcdef'
 
     def test_config_overrides(self, config, tmp_config_dir):
         override_path = tmp_config_dir / 'settings.override.toml'
-        override_settings = {'branding': {'color': '#123456'}}
+        override_settings = {'bot': {'color': '#123456'}}
 
         with override_path.open('w') as f:
             rtoml.dump(override_settings, f)
 
-        assert config.get_config('branding.color') == Settings().branding.color
+        assert config.get_config('bot.color') == Settings().bot.color
         config.reload()
-        assert config.get_config('branding.color') == '#123456'
+        assert config.get_config('bot.color') == '#123456'
 
     def test_missing_config_file(self):
         with pytest.raises(ConfigDirectoryNotFoundError):

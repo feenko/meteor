@@ -1,5 +1,6 @@
-[branding]
-color = "#E3223B"
+[bot]
+color = "E3223B"
+status = "meteors.cc"
 
 [users]
 owners = [{ name = "feenko", id = 1155452926970577008 }]

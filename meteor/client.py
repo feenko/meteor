@@ -2,6 +2,7 @@ import logging
 
 import orjson
 from asyncpg import Connection, Pool, create_pool
+from discord import CustomActivity
 from discord.ext import commands
 
 from meteor.config import Config
@@ -37,8 +38,9 @@ class Client(commands.Bot):
     async def on_message(self, *args, **kwargs) -> None: ...
 
     async def on_ready(self) -> None:
-        await self.tree.sync()
         _log.info(f'Logged in as {self.user}')
+        await self.change_presence(activity=CustomActivity(name=self.config.get_config('bot.status')))
+        await self.tree.sync()
         if is_docker():
             _log.info('docker-ok')
 
