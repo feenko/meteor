@@ -6,10 +6,6 @@
 
 Fast and reliable Discord solution written in Python using modern technologies.
 
-## Changelog
-
-All notable changes to this project will be documented in the [CHANGELOG.md](CHANGELOG.md) file.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
