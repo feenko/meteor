@@ -51,3 +51,7 @@ class Client(commands.Bot):
 
     async def run(self) -> None:
         await self.start(token=self.config.get_secret('bot.token'), reconnect=True)
+
+    async def close(self) -> None:
+        await super().close()
+        await self.pool.close()
