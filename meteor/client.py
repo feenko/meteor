@@ -19,7 +19,7 @@ class Client(commands.Bot):
         self.pool: Pool | None = None
         self.boot = time.perf_counter()
         self.config = Config()
-        self.owner_ids = set(owner['id'] for owner in self.config.get_config('users.owners'))
+        self.owner_ids = frozenset(owner['id'] for owner in self.config.get_config('users.owners'))
 
     async def _init_pool(self, conn: Connection) -> None:
         await conn.set_type_codec('jsonb', encoder=orjson.dumps, decoder=orjson.loads, schema='pg_catalog')
