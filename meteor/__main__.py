@@ -19,8 +19,11 @@ _log = logging.getLogger('meteor')
 
 
 async def runner():
+    intents = Intents.default()
+    intents.members = True
+
     client = Client(
-        intents=Intents.all(),
+        intents=intents,
         command_prefix=None,
         help_command=None,
         allowed_mentions=AllowedMentions(
