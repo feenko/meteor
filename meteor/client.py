@@ -37,7 +37,8 @@ class Client(commands.Bot):
         await Migrations(pool=self.pool, config=self.config).execute_schema()
         await self.load_extension('meteor.cogs')
 
-    async def on_message(self, *args, **kwargs) -> None: ...
+    async def on_message(self, *args, **kwargs) -> None:
+        pass
 
     async def on_ready(self) -> None:
         _log.info(f'Logged in as {self.user}')
