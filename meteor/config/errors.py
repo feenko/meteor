@@ -1,18 +1,14 @@
 class ConfigDirectoryNotFoundError(Exception):
-    def __init__(self, path: str):
-        super().__init__(f"Configuration directory '{path}' not found.")
-        self.path = path
+    def __init__(self, message: str):
+        super().__init__(message)
 
 
 class ConfigValidationError(Exception):
-    def __init__(self, path: str, message: str):
-        super().__init__(f"Configuration validation error in '{path}': {message}")
-        self.path = path
-        self.message = message
+    def __init__(self, message: str):
+        super().__init__(message)
 
 
 class ConfigParsingError(Exception):
-    def __init__(self, path: str, message: str):
-        super().__init__(f"Configuration parsing error in '{path}': {message}")
-        self.path = path
-        self.message = message
+    def __init__(self, message: str):
+        super().__init__(message)
+

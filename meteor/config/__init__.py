@@ -1,6 +1,5 @@
 __all__ = ('CONFIG_FILES', 'Config')
 
-import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -15,8 +14,6 @@ from meteor.config.errors import (
 )
 from meteor.config.models import Secrets, Settings
 
-_log = logging.getLogger(__name__)
-
 CONFIG_FILES = {
     'secrets': ('secrets.toml', Secrets),
     'settings': ('settings.toml', Settings),
@@ -28,7 +25,7 @@ class Config:
         self._cache: dict[str, Any] = {}
         self.directory = Path(directory)
         if not self.directory.exists():
-            raise ConfigDirectoryNotFoundError(str(self.directory))
+            raise ConfigDirectoryNotFoundError(f'Config directory not found: {self.directory}')
         self._load()
 
     def _load(self) -> None:
@@ -38,51 +35,62 @@ class Config:
                 self._create_default(full_path, model)
 
             try:
-                config_data = rtoml.load(full_path)
-                self._cache_data(config_name, config_data)
+                base_data = rtoml.load(full_path)
+                validated_base = model(**base_data)
+                base_dict = validated_base.model_dump()
 
-                override_path = full_path.with_name(full_path.stem + '.override.toml')
+                override_path = full_path.with_name(f'{full_path.stem}.override.toml')
                 if override_path.exists():
                     override_data = rtoml.load(override_path)
-                    self._cache_data(config_name, override_data, is_override=True)
+                    merged_dict = self._merge_configs(base_dict, override_data)
+                    try:
+                        validated_merged = model(**merged_dict)
+                        merged_dict = validated_merged.model_dump()
+                    except ValidationError as e:
+                        raise ConfigValidationError(
+                            f'Validation error in merged configuration from {override_path}: {e}'
+                        ) from e
+                else:
+                    merged_dict = base_dict
+
+                self._cache_data(config_name, merged_dict)
 
             except ValidationError as e:
-                raise ConfigValidationError(str(full_path), str(e)) from e
+                raise ConfigValidationError(f'Validation error in {full_path}: {e}') from e
             except (rtoml.TomlParsingError, rtoml.TomlSerializationError) as e:
-                raise ConfigParsingError(str(full_path), str(e)) from e
+                raise ConfigParsingError(f'Parsing error in {full_path}: {e}') from e
 
     def _create_default(self, path: Path, model: type[BaseModel]) -> None:
-        data = model.model_construct().model_dump()
+        default_data = model.model_construct().model_dump()
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open('w') as f:
-            rtoml.dump(data, f)
+            rtoml.dump(default_data, f)
 
     def _merge_configs(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         merged = base.copy()
-        for key, value in override.items():
-            if isinstance(value, dict) and isinstance(merged.get(key), dict):
-                merged[key] = self._merge_configs(merged[key], value)
+        for key, override_value in override.items():
+            base_value = merged.get(key)
+            if isinstance(base_value, dict) and isinstance(override_value, dict):
+                merged[key] = self._merge_configs(base_value, override_value)
+            elif isinstance(base_value, dict) and not isinstance(override_value, dict):
+                raise ValueError(f"Cannot merge non-dict value for key '{key}' into existing dict")
             else:
-                merged[key] = value
+                merged[key] = override_value
         return merged
 
-    def _cache_data(self, name: str, data: dict[str, Any], *, is_override: bool = False) -> None:
-        if is_override:
-            existing = {k.split('.', 1)[1]: v for k, v in self._cache.items() if k.startswith(f'{name}.')}
-            data = self._merge_configs(existing, data) if existing else data
-            self._cache = {k: v for k, v in self._cache.items() if not k.startswith(f'{name}.')}
-
+    def _cache_data(self, name: str, data: dict[str, Any]) -> None:
         for key, value in data.items():
             if isinstance(value, dict):
                 self._cache_data(f'{name}.{key}', value)
             else:
                 self._cache[f'{name}.{key}'] = value
 
-    def _get_env_value(self, name: str, key: str) -> Any | None:
-        env_key = f'METEOR_{name.upper()}_{key.replace(".", "_").upper()}'
+    def _get_env_value(self, config_name: str, key: str) -> Any | None:
+        env_key = f'METEOR_{config_name.upper()}_{key.replace(".", "_").upper()}'
         return os.environ.get(env_key)
 
-    def _get_cached_value(self, name: str, key: str) -> Any | None:
-        return self._get_env_value(name, key) or self._cache.get(f'{name}.{key}')
+    def _get_cached_value(self, config_name: str, key: str) -> Any | None:
+        return self._get_env_value(config_name, key) or self._cache.get(f'{config_name}.{key}')
 
     def get_secret(self, key: str) -> Any | None:
         return self._get_cached_value('secrets', key)
@@ -91,4 +99,5 @@ class Config:
         return self._get_cached_value('settings', key)
 
     def reload(self) -> None:
+        self._cache.clear()
         self._load()
